@@ -1,0 +1,22 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Docker
+*.pid
+
+# Node
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# GitHub Actions temp
+*.tmp

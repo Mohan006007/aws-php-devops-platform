@@ -2,18 +2,18 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout code
+    # 1. Checkout code
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Configure AWS credentials
+    # 2. Configure AWS credentials
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
@@ -21,43 +21,51 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    # Login to ECR (GitHub runner)
+    # 3. Login to Amazon ECR
     - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+      uses: aws-actions/amazon-ecr-login@v1
 
-    # Build Docker image
+    # 4. Build Docker image
     - name: Build Docker Image
-      run: docker build -t php-app -f docker/Dockerfile .
+      run: |
+        docker build -t php-app .
 
-    # Tag image
+    # 5. Tag Docker image
     - name: Tag Image
       run: |
-        docker tag php-app:latest \
-        ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+        docker tag php-app:latest ${{ secrets.ECR_REPOSITORY }}:latest
 
-    # Push image to ECR
+    # 6. Push image to ECR
     - name: Push to ECR
       run: |
-        docker push \
-        ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+        docker push ${{ secrets.ECR_REPOSITORY }}:latest
 
-    # Deploy to EC2
-    - name: Deploy to EC2
+    # 7. Deploy to EC2
+    - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          # Login to ECR from EC2 (using AWS CLI v2 already installed OR role)
+          # Install AWS CLI v2 if missing
+          if ! command -v aws &> /dev/null
+          then
+            sudo apt update -y
+            sudo apt install unzip -y
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+          fi
+
+          # Login to ECR
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
-          docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+          docker login --username AWS --password-stdin $(echo ${{ secrets.ECR_REPOSITORY }} | cut -d'/' -f1)
 
           # Pull latest image
-          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+          docker pull ${{ secrets.ECR_REPOSITORY }}:latest
 
-          # Stop & remove old container
+          # Stop and remove old container
           docker stop php-container || true
           docker rm php-container || true
 
@@ -68,4 +76,4 @@ jobs:
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
             -e DB_NAME=testdb \
             --name php-container \
-            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+            ${{ secrets.ECR_REPOSITORY }}:latest

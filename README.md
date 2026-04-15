@@ -1,113 +1,127 @@
 # 🚀 AWS PHP DevOps Platform
 
-Production-style deployment of a containerized PHP application using Docker, AWS, and CI/CD with GitHub Actions.
+Production-ready deployment of a containerized PHP application using **Docker, AWS (EC2, ECR, RDS), and GitHub Actions CI/CD**.
 
 ---
 
 ## 📌 Overview
 
-This project demonstrates an end-to-end DevOps workflow where a PHP application is:
+This project demonstrates a complete **end-to-end DevOps workflow**:
 
-* Containerized using Docker
-* Built and pushed to Amazon ECR
-* Automatically deployed to EC2 via GitHub Actions
-* Connected to AWS RDS (MySQL)
-
-Every push to the `main` branch triggers the pipeline.
+- Build a PHP application  
+- Containerize using Docker  
+- Push image to Amazon ECR  
+- Deploy on EC2  
+- Connect with RDS (MySQL)  
+- Automate everything using GitHub Actions  
 
 ---
 
 ## 🏗️ Architecture
 
-GitHub → GitHub Actions → Docker Build → Amazon ECR → EC2 → RDS
+GitHub → GitHub Actions → Docker → Amazon ECR → EC2 → RDS
 
 ---
 
 ## ⚙️ Tech Stack
 
-* **Backend:** PHP
-* **Containerization:** Docker
-* **CI/CD:** GitHub Actions
-* **Cloud:** AWS (EC2, ECR, RDS)
-* **Database:** MySQL (RDS)
+- **AWS** → EC2, ECR, RDS  
+- **Docker** → Containerization  
+- **GitHub Actions** → CI/CD  
+- **PHP** → Backend  
+- **MySQL (RDS)** → Database  
 
 ---
 
-## 🔄 CI/CD Workflow
+## 🔄 CI/CD Pipeline
 
-1. Code pushed to GitHub (`main` branch)
-2. GitHub Actions triggers pipeline
-3. Docker image is built
-4. Image is pushed to Amazon ECR
-5. EC2 instance pulls latest image
-6. Container is restarted with updated code
+The pipeline automatically:
+
+1. Checks out code  
+2. Configures AWS credentials  
+3. Builds Docker image  
+4. Pushes image to ECR  
+5. Connects to EC2 via SSH  
+6. Pulls latest image  
+7. Runs container  
+
+---
+
+## 📸 Screenshots
+
+### ✅ CI/CD Pipeline Success
+![Pipeline](./screenshots/pipeline-success.png)
+
+### 🐳 Docker Container Running (EC2)
+![Docker](./screenshots/docker-running.png)
+
+### 📦 Amazon ECR Repository
+![ECR](./screenshots/ecr-images.png)
+
+### ☁️ EC2 Instance Running
+![EC2](./screenshots/ec2-instance.png)
+
+### 🗄️ Amazon RDS (MySQL)
+![RDS](./screenshots/rds-db.png)
+
+### 🌐 Application Output
+![App](./screenshots/app-output.png)
 
 ---
 
 ## 📂 Project Structure
-
 ```
-.
-├── .github/workflows/    # CI/CD pipeline
-├── app/                  # PHP application code
-├── docker/               # Dockerfile
+aws-php-devops-platform/
+│
+├── app/ # PHP application
+├── docker/ # Dockerfile
+├── .github/workflows/ # CI/CD pipeline
 ├── README.md
+└── .gitignore
 ```
-
 ---
 
 ## 🔐 Secrets Used
 
 Stored in GitHub Secrets:
 
-* `AWS_ACCESS_KEY_ID`
-* `AWS_SECRET_ACCESS_KEY`
-* `AWS_REGION`
-* `ECR_REPOSITORY`
-* `EC2_HOST`
-* `EC2_USER`
-* `EC2_SSH_KEY`
-* `DB_PASSWORD`
+- AWS_ACCESS_KEY_ID  
+- AWS_SECRET_ACCESS_KEY  
+- AWS_REGION  
+- ECR_REPOSITORY  
+- EC2_HOST  
+- EC2_USER  
+- EC2_SSH_KEY  
+- DB_PASSWORD  
 
 ---
 
-## 🚀 How to Run Locally
+## 🚀 How It Works
 
-```bash
-# Build image
-docker build -t php-app -f docker/Dockerfile .
-
-# Run container
-docker run -d -p 80:80 php-app
-```
-
----
-
-## 🌐 Deployment
-
-Application is deployed on AWS EC2 and connected to AWS RDS.
-
-Each commit to `main` automatically updates the live application.
+- Push code to `main` branch  
+- GitHub Actions triggers pipeline  
+- Docker image is built and pushed to ECR  
+- EC2 pulls latest image  
+- Container runs automatically  
+- Application connects to RDS  
 
 ---
 
-## 📈 Future Improvements
+## 🧠 Key Learnings
 
-* Add domain & HTTPS (Nginx + SSL)
-* Use IAM Roles instead of access keys
-* Add monitoring (CloudWatch)
-* Implement health checks & auto-restart
-* Move to ECS or Kubernetes
-
----
-
-## 📬 Author
-
-**Mohan**
-GitHub: https://github.com/Mohan006007
+- CI/CD pipeline implementation  
+- Docker image lifecycle  
+- AWS service integration  
+- Secure credential management  
+- Real-world deployment flow  
 
 ---
 
-## ⭐ Note
+## 👨‍💻 Author
 
-This project is designed to demonstrate real-world DevOps practices for beginners and aspiring engineers.
+**Mohan**  
+Aspiring AI & DevOps Engineer  
+
+GitHub: https://github.com/Mohan006007  
+
+---

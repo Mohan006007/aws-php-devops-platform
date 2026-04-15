@@ -28,7 +28,7 @@ jobs:
     # 4. Build Docker image
     - name: Build Docker Image
       run: |
-        docker build -t php-app ./app
+        docker build -t php-app -f docker/Dockerfile .
 
     # 5. Tag Docker image
     - name: Tag Image

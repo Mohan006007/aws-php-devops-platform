@@ -17,6 +17,12 @@ This project demonstrates a complete **end-to-end DevOps workflow**:
 
 ---
 
+## 🌐 Live Application
+
+👉 Access the live app here:  
+**http://13.232.216.182:80**
+
+---
 ## 🏗️ Architecture
 
 GitHub → GitHub Actions → Docker → Amazon ECR → EC2 → RDS

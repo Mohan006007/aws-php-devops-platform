@@ -14,14 +14,6 @@ This project demonstrates a complete **end-to-end DevOps workflow**:
 - Deploy on EC2  
 - Connect with RDS (MySQL)  
 - Automate everything using GitHub Actions  
-
----
-
-## 🌐 Live Application
-
-👉 Access the live app here:  
-**http://13.232.216.182:80**
-
 ---
 ## 🏗️ Architecture
 
